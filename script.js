@@ -67,3 +67,24 @@ function insertdata() {   //insert function
     }
 }
 
+//function to activate and deactivate halls
+function activatehall(hl, vl) {
+    if (vl == "1") {
+        set(ref(db, hl), {
+            S1: 1,
+            S2: 1,
+            S3: 1,
+            S4: 1,
+        });
+    } else {
+        set(ref(db, hl), {
+            S1: 0,
+            S2: 0,
+            S3: 0,
+            S4: 0,
+        });
+    }
+}
+
+//functions to be called by buttons
+insbt.addEventListener("click", insertdata);

@@ -67,6 +67,26 @@ function insertdata() {   //insert function
     }
 }
 
+//this function checks the current time and the database and call the hall activation function
+function checktime() {
+    console.log("inchtime");
+    var tdt = new Date();
+    var ctm = tdt.getHours() + ":" + tdt.getMinutes();
+    var cdt = new Date().toJSON().slice(0, 10);
+    const dbref = ref(db);
+    get(child(dbref, "Booking/" + cdt + "/" + ctm))
+        .then((snapshot) => {
+            if (snapshot.exists()) {
+                acthl = snapshot.val().hall1;
+            }
+        })
+
+        .catch((error) => {
+            alert("unsuccess, error" + error);
+        });
+    activatehall("hall1", acthl);
+}
+
 //function to activate and deactivate halls
 function activatehall(hl, vl) {
     if (vl == "1") {

@@ -17,7 +17,6 @@ import {
 const db = getDatabase();
 
 //variables for inputs
-
 var sid = document.getElementById("sid");
 var hall = document.getElementById("hall");
 var dt = document.getElementById("dt");
@@ -25,7 +24,7 @@ var ftime = document.getElementById("ftime");
 var ttime = document.getElementById("ttime");
 var acthl;
 
-function insertdata() {   //insert function
+function insertdata() { //insert function
     if (hall.value == "hall1") {
         set(ref(db, "Booking/" + dt.value + "/" + ftime.value), {
             hall1: "1",
@@ -106,5 +105,9 @@ function activatehall(hl, vl) {
     }
 }
 
+
 //functions to be called by buttons
 insbt.addEventListener("click", insertdata);
+
+//it calls the function for every 1 min
+setInterval(checktime,60000);

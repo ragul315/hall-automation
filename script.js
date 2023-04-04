@@ -1,3 +1,4 @@
+//firebase connection
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
 const firebaseConfig = {
     apiKey: "AIzaSyCe6mmtcXKcMxObKCUqvh47_r1ab4jG0fc",
@@ -14,3 +15,55 @@ import {
     getDatabase, ref, get, set, child, update, remove,
 } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
 const db = getDatabase();
+
+//variables for inputs
+
+var sid = document.getElementById("sid");
+var hall = document.getElementById("hall");
+var dt = document.getElementById("dt");
+var ftime = document.getElementById("ftime");
+var ttime = document.getElementById("ttime");
+var acthl;
+
+function insertdata() {   //insert function
+    if (hall.value == "hall1") {
+        set(ref(db, "Booking/" + dt.value + "/" + ftime.value), {
+            hall1: "1",
+        })
+            .then(() => {
+                alert("data added sucessfully");
+            })
+            .catch((error) => {
+                alert("unsuccess, error" + error);
+            });
+        set(ref(db, "Booking/" + dt.value + "/" + ttime.value), {
+            hall1: "0",
+        })
+            .then(() => {
+                alert("data added sucessfully");
+            })
+            .catch((error) => {
+                alert("unsuccess, error" + error);
+            });
+    } else {
+        set(ref(db, "Booking/" + dt.value + "/" + ftime.value), {
+            hall2: "1",
+        })
+            .then(() => {
+                alert("data added sucessfully");
+            })
+            .catch((error) => {
+                alert("unsuccess, error" + error);
+            });
+        set(ref(db, "Booking/" + dt.value + "/" + ttime.value), {
+            hall2: "0",
+        })
+            .then(() => {
+                alert("data added sucessfully");
+            })
+            .catch((error) => {
+                alert("unsuccess, error" + error);
+            });
+    }
+}
+

@@ -1,4 +1,3 @@
-//firebase connection
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
 const firebaseConfig = {
     apiKey: "AIzaSyCe6mmtcXKcMxObKCUqvh47_r1ab4jG0fc",
@@ -16,21 +15,37 @@ import {
 } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
 const db = getDatabase();
 
-//variables for inputs
 var sid = document.getElementById("sid");
 var hall = document.getElementById("hall");
 var dt = document.getElementById("dt");
 var ftime = document.getElementById("ftime");
 var ttime = document.getElementById("ttime");
-var acthl;
+        
+var acth1,acth2,cntd=1;
 
-function insertdata() { //insert function
+function insertdata() {
+    additemtotable(sid.value,dt.value,hall.value,ftime.value,ttime.value);
+    set(ref(db,"user/"+cntd),{
+        StaffId: sid.value,
+        hallno: hall.value,
+        date:dt.value,
+        fromtime: ftime.value,
+        totime: ttime.value
+    })
+    //prompt with error
+    .then(()=>{
+        alert("data added sucessfully");
+    })
+    .catch((error)=>{
+        alert("unsuccess, error"+error);
+    });
+    cntd++;
     if (hall.value == "hall1") {
         set(ref(db, "Booking/" + dt.value + "/" + ftime.value), {
             hall1: "1",
         })
             .then(() => {
-                alert("data added sucessfully");
+                
             })
             .catch((error) => {
                 alert("unsuccess, error" + error);
@@ -39,7 +54,7 @@ function insertdata() { //insert function
             hall1: "0",
         })
             .then(() => {
-                alert("data added sucessfully");
+               
             })
             .catch((error) => {
                 alert("unsuccess, error" + error);
@@ -49,7 +64,7 @@ function insertdata() { //insert function
             hall2: "1",
         })
             .then(() => {
-                alert("data added sucessfully");
+               
             })
             .catch((error) => {
                 alert("unsuccess, error" + error);
@@ -58,7 +73,7 @@ function insertdata() { //insert function
             hall2: "0",
         })
             .then(() => {
-                alert("data added sucessfully");
+              
             })
             .catch((error) => {
                 alert("unsuccess, error" + error);
@@ -66,7 +81,6 @@ function insertdata() { //insert function
     }
 }
 
-//this function checks the current time and the database and call the hall activation function
 function checktime() {
     console.log("inchtime");
     var tdt = new Date();
@@ -76,38 +90,98 @@ function checktime() {
     get(child(dbref, "Booking/" + cdt + "/" + ctm))
         .then((snapshot) => {
             if (snapshot.exists()) {
-                acthl = snapshot.val().hall1;
+                acth1 = snapshot.val().hall1;
+                acth2 = snapshot.val().hall2;
             }
         })
 
         .catch((error) => {
             alert("unsuccess, error" + error);
         });
-    activatehall("hall1", acthl);
+
+    activatehall(acth1, acth2);
 }
 
-//function to activate and deactivate halls
-function activatehall(hl, vl) {
-    if (vl == "1") {
-        set(ref(db, hl), {
-            S1: 1,
-            S2: 1,
-            S3: 1,
-            S4: 1,
-        });
-    } else {
-        set(ref(db, hl), {
-            S1: 0,
-            S2: 0,
-            S3: 0,
-            S4: 0,
+function activatehall(v1 , v2) {
+    if (v1 == 1){
+        set(ref(db, "hall1/"), {
+            S1: 1 ,
+            S2: 1 ,
         });
     }
+    else{
+        set(ref(db, "hall1/"), {
+            S1: 0 ,
+            S2: 0 ,
+        }); 
+    }
+    if (v2 == 1){
+        set(ref(db, "hall2/"), {
+            S1: 1 ,
+            S2: 1 ,
+        });
+    }
+    else{
+        set(ref(db, "hall2/"), {
+            S1: 0 ,
+            S2: 0 ,
+        }); 
+    }    
+    
+    
+}
+
+insbt.addEventListener("click", insertdata);
+
+setInterval(checktime,30000);
+
+var stdno = 0;
+var tbody = document.getElementById('tbody1');
+
+function additemtotable(name, date, hall, ftime, ttime) {
+    let trow = document.createElement("tr");
+    let td1 = document.createElement('td');
+    let td2 = document.createElement('td');
+    let td3 = document.createElement('td');
+    let td4 = document.createElement('td');
+    let td5 = document.createElement('td');
+    let td6 = document.createElement('td');
+    td1.innerHTML = ++stdno;
+    td2.innerHTML = name;
+    td3.innerHTML = date;
+    td4.innerHTML = hall;
+    td5.innerHTML = ftime;
+    td6.innerHTML = ttime;
+
+    trow.appendChild(td1);
+    trow.appendChild(td2);
+    trow.appendChild(td3);
+    trow.appendChild(td4);
+    trow.appendChild(td5);
+    trow.appendChild(td6);
+
+    tbody.appendChild(trow);
+}
+
+function allitm(user) {
+    stdNo = 0;
+    tbody.innerHTML = "";
+    user.forEach(element => {
+        additemtotable(element.name, element.date, element.hall, element.ftime, element.ttime);
+    });
 }
 
 
-//functions to be called by buttons
-insbt.addEventListener("click", insertdata);
+function getalldataonce() {
+    const dbRef = ref(db)
 
-//it calls the function for every 1 min
-setInterval(checktime,60000);
+    get(child(dbRef, "user"))
+        .then((snapshot) => {
+            var invalues = [];
+            array.forEach(elements => {
+                invalues.push(childsnapshot.val());
+            });
+            allitm(invalues);
+        });
+}
+window.onload = getalldataonce;

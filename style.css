@@ -1,0 +1,65 @@
+body{
+    background-color: #031956;
+    top: 0px;
+        left: 0px;
+        right: 0px;
+        margin: 0px;
+        padding: 0px;
+        color: white;
+
+}
+.inputcontainer{
+    align-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 5px;
+   
+}
+.control{
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    display: block;
+    padding: 20px;
+    border-bottom-right-radius:50px ;
+    border-bottom-left-radius:50px ;
+    background-color: #344fa1;
+    margin: 0px;
+}
+.sinput{
+    display: inline;
+}
+button{
+    border-radius: 50px;
+    background-color: #031956;
+    border: none;
+    padding: 5px;
+    color: white;
+    width: 100px;
+}
+@media screen and (min-width:760px) {
+  
+}
+@media screen and (max-width:760px) {
+    .inputcontainer{
+        width: 200px;
+        padding: 5px;
+    }
+    .sinput{
+        display: block;
+    }
+    p{
+
+    }
+    input{
+        width: 125px;
+    }
+}
+p{
+    display: inline;
+}
+*{
+    align-items: center;
+    align-content: center;
+    text-align: center;
+}
